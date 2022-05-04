@@ -1,5 +1,4 @@
-package lab5;
-
+package lab6;
 import java.util.*;
 
 public class Parser {
@@ -98,6 +97,7 @@ public class Parser {
 	private Statement statement() {
 		// Statement --> ; | Block | Assignment | IfStatement | WhileStatement
 		Statement s = new Skip();
+		// student exercise
 		switch (token.type()) {
 		case Identifier:
 			s = this.assignment();
@@ -135,6 +135,7 @@ public class Parser {
 	}
 
 	private Conditional ifStatement() {
+		// IfStatement --> if ( Expression ) Statement [ else Statement ]
 		token = lexer.next();
 		match(TokenType.LeftParen);
 		Expression t = expression();
@@ -148,17 +149,18 @@ public class Parser {
 	}
 
 	private Loop whileStatement() {
+		// WhileStatement --> while ( Expression ) Statement
 		token = lexer.next();
 		match(TokenType.LeftParen);
 		Expression t = expression();
 		match(TokenType.RightParen);
-		Statement s = this.statement();
-		return new Loop(t, s); // LAB3 Oyutnuudiin hiih heseg (umnuh nuhtsult dawtaltiig deerh zui
-								// togtoltoigoor shalgah functs.)
+		return new Loop(t, this.statement());
 	}
 
 	private Expression expression() {
+		// Expression --> Conjunction { || Conjunction }
 		Expression e = this.conjunction();
+
 		return e;
 	}
 
@@ -174,17 +176,14 @@ public class Parser {
 	}
 
 	private Expression equality() {
+		// Equality --> Relation [ EquOp Relation ]
 		Expression e = relation();
 		while (this.isEqualityOp()) {
 			Operator op = new Operator(match(token.type()));
 			Expression term2 = relation();
 			e = new Binary(op, e, term2);
 		}
-		return e; // LAB3 Oyutnuudiin hiih heseg (edgeer uildliin daraallaaraa doosh daraalan
-					// bichigdsen functsuud ni
-		// ilerhiilliig shalgaj uusgedeg functsuud ba. Addition) functsaas dooshoo yaj
-		// duudaj ajilluulj bgaa zarchmiig harj ene daalgawriig hiine uu.)
-		// shalgadag functsuud ni Operator classad bichigdsen bgaa.
+		return e;
 	}
 
 	private Expression relation() {
@@ -195,11 +194,7 @@ public class Parser {
 			Expression term2 = addition();
 			e = new Binary(op, e, term2);
 		}
-		return e; // LAB3 Oyutnuudiin hiih heseg (edgeer uildliin daraallaaraa doosh daraalan
-					// bichigdsen functsuud ni
-		// ilerhiilliig shalgaj uusgedeg functsuud ba. addition() functsaas dooshoo yaj
-		// duudaj ajilluulj bgaa zarchmiig harj ene daalgawriig hiine uu.)
-		// shalgadag functsuud ni Operator classad bichigdsen bgaa.
+		return e;
 	}
 
 	private Expression addition() {
@@ -270,7 +265,7 @@ public class Parser {
 			v = new CharValue(match(token.type()).charAt(0));
 			break;
 		}
-		return v;
+		return v; // student exercise
 	}
 
 	private boolean isAddOp() {
@@ -309,9 +304,8 @@ public class Parser {
 	}
 
 	public static void main(String args[]) {
-		System.out.println("Begin parsing... \n");
-		Parser parser = new Parser(
-				new Lexer("C:\\Users\\gdwoo\\git\\f.cs305_helniizarchim\\f.cs305\\src\\lab5\\newton.cpp"));
+		System.out.println("Begin parsing... " + args[0] + "\n");
+		Parser parser = new Parser(new Lexer(args[0]));
 		Program prog = parser.program();
 		prog.display(); // display abstract syntax tree
 	} // main
