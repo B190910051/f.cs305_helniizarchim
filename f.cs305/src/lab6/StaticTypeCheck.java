@@ -104,8 +104,9 @@ public class StaticTypeCheck {
 				check(typ == Type.BOOL, "type error for " + u.op);
 			else if (u.op.NegateOp())
 				check(typ == Type.INT || typ == Type.FLOAT, u.op + ": non-number operand");
+				
 			//LAB06 Oyutnuudiin hiih heseg (Binary uildliig harj guitsetgene)
-			else
+			else 
 				throw new IllegalArgumentException("should never reach here");
 			return;
 		}
@@ -142,6 +143,8 @@ public class StaticTypeCheck {
 			V(c.elsebranch, tm);
 			return;
 		}
+		
+		
 
 		// LAB06 Oyutnuudiin hiih heseg (Conditional iin turliig shalgaj bgaa hesgiig
 		// harj Loop shalgah.)
@@ -158,7 +161,7 @@ public class StaticTypeCheck {
 
 	public static void main(String args[]) {
 		Parser parser = new Parser(new Lexer(
-				"C:\\Users\\tsend\\Downloads\\eclipse-jee-2018-12-R-win32-x86_64\\CS305_LAB06\\src\\factorial.cpp"));
+				"C:\\Users\\gdwoo\\git\\f.cs305_helniizarchim\\f.cs305\\src\\lab6\\factorial.cpp"));
 		Program prog = parser.program();
 		prog.display();
 		System.out.println("Begin type checking...");
