@@ -176,6 +176,7 @@ public class Parser {
 		Assignment ass = assignment();
 		match(TokenType.RightParen);
 		Statement body = this.statement();
+		
 		return new For(assign, t, ass, body);
 	}
 
@@ -328,7 +329,7 @@ public class Parser {
 	public static void main(String args[]) {
 		System.out.println("Begin parsing... \n");
 		Parser parser = new Parser(
-				new Lexer("C:\\Users\\gdwoo\\eclipse-workspace\\f.cs305\\src\\bie_daalt_1\\newton.cpp"));
+				new Lexer("C:\\Users\\gdwoo\\git\\f.cs305_helniizarchim\\f.cs305\\src\\bie_daalt_1\\newton.cpp"));
 		Program prog = parser.program();
 		prog.display(); // display abstract syntax tree
 	} // main

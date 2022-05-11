@@ -4,6 +4,7 @@ package lab6;
 
 import java.util.*;
 
+
 // Static type checking for Clite is defined by the functions 
 // V and the auxiliary functions typing and typeOf.  These
 // functions use the classes in the Abstract Syntax of Clite.
@@ -104,9 +105,14 @@ public class StaticTypeCheck {
 				check(typ == Type.BOOL, "type error for " + u.op);
 			else if (u.op.NegateOp())
 				check(typ == Type.INT || typ == Type.FLOAT, u.op + ": non-number operand");
-				
-			//LAB06 Oyutnuudiin hiih heseg (Binary uildliig harj guitsetgene)
-			else 
+			else if (u.op.intOp())
+				check(typ == Type.FLOAT || typ == Type.CHAR, u.op + ": non-cast operand");
+			else if (u.op.floatOp())
+				check(typ == Type.INT, u.op + ": non-cast operand");
+			else if (u.op.charOp())
+				check(typ == Type.INT, u.op + ": non-cast operand");
+			// LAB06 Oyutnuudiin hiih heseg (Binary uildliig harj guitsetgene)
+			else
 				throw new IllegalArgumentException("should never reach here");
 			return;
 		}
@@ -143,8 +149,15 @@ public class StaticTypeCheck {
 			V(c.elsebranch, tm);
 			return;
 		}
-		
-		
+
+		if (s instanceof Loop) {
+			Loop c = (Loop) s;
+			Type srctype = typeOf(c.test, tm);
+			check(srctype == Type.BOOL, "If: Test expression is not bool");
+			V(c.test, tm);
+			V(c.body, tm);
+			return;
+		}
 
 		// LAB06 Oyutnuudiin hiih heseg (Conditional iin turliig shalgaj bgaa hesgiig
 		// harj Loop shalgah.)
@@ -160,8 +173,8 @@ public class StaticTypeCheck {
 	}
 
 	public static void main(String args[]) {
-		Parser parser = new Parser(new Lexer(
-				"C:\\Users\\gdwoo\\git\\f.cs305_helniizarchim\\f.cs305\\src\\lab6\\factorial.cpp"));
+		Parser parser = new Parser(
+				new Lexer("C:\\Users\\gdwoo\\git\\f.cs305_helniizarchim\\f.cs305\\src\\lab6\\factorial.cpp"));
 		Program prog = parser.program();
 		prog.display();
 		System.out.println("Begin type checking...");
