@@ -7,5 +7,7 @@ int main ( ) {
     while (i < n) {
         i = i + 1;
         f = f * float(i);
+        f = float(n) + f;
+        f = n;
     }
 }

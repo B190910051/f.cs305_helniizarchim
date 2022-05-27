@@ -20,7 +20,7 @@ public class TypeTransformer {
             Expression t1 = T (b.term1, tm);
             Expression t2 = T (b.term2, tm);
             if(b.op.BooleanOp()) return new Binary(b.op, t1,t2);
-            if (typ1 == Type.INT) 
+            if (typ1 == Type.INT)
                 return new Binary(b.op.intMap(b.op.val), t1,t2);
             else if (typ1 == Type.FLOAT) 
                 return new Binary(b.op.floatMap(b.op.val), t1,t2);
@@ -36,6 +36,12 @@ public class TypeTransformer {
             Expression t1 = T (u.term, tm);
             if (typ1 == Type.INT) 
                 return new Unary(u.op.intMap(u.op.val), t1);
+            else if (typ1 == Type.BOOL) 
+                return new Unary(u.op.boolMap(u.op.val), t1);
+            else if (typ1 == Type.CHAR) 
+                return new Unary(u.op.charMap(u.op.val), t1);
+            else if (typ1 == Type.FLOAT) 
+                return new Unary(u.op.floatMap(u.op.val), t1);
             //BD2 nuhuh heseg
             throw new IllegalArgumentException("should never reach here");
         }
@@ -55,6 +61,11 @@ public class TypeTransformer {
                 if (srctype == Type.INT) {
                     src = new Unary(new Operator(Operator.I2F), src);
                     srctype = Type.FLOAT;
+                }
+            } else if(ttype == Type.INT) {
+            	if (srctype == Type.CHAR) {
+                    src = new Unary(new Operator(Operator.C2I), src);
+                    srctype = Type.INT;
                 }
             }
             //BD2 nuhuh heseg
@@ -87,7 +98,7 @@ public class TypeTransformer {
     
 
     public static void main(String args[]) {
-        Parser parser  = new Parser(new Lexer("C:\\Users\\tsend\\Downloads\\eclipse-jee-2018-12-R-win32-x86_64\\Ass02\\src\\factorial.cpp"));
+        Parser parser  = new Parser(new Lexer("C:\\Users\\gdwoo\\git\\f.cs305_helniizarchim\\f.cs305\\src\\bie_daalt_2\\factorial.cpp"));
         Program prog = parser.program();
         prog.display();           
         System.out.println("\nBegin type checking...");
@@ -97,7 +108,7 @@ public class TypeTransformer {
         StaticTypeCheck.V(prog);
         Program out = T(prog, map);
         System.out.println("Output AST");
-         out.display();    
+        out.display();    
     } //main
 
     } // class TypeTransformer
